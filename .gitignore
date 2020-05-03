@@ -1,0 +1,15 @@
+# Created by .ignore support plugin (hsz.mobi)
+.settings
+.project
+.idea
+*.iml
+**/.settings
+**/.classpath
+**/.eclipse
+**/.project
+**/target
+**/bin
+MANIFEST.MF
+.DS_Store
+**/.DS_Store
+/src/main/resources/email.properties
