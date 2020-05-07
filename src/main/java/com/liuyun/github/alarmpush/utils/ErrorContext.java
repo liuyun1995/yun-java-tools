@@ -1,4 +1,4 @@
-package com.liuyun.github.alarmpush;
+package com.liuyun.github.alarmpush.utils;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;

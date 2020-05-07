@@ -1,13 +1,18 @@
-package com.liuyun.github.alarmpush;
+package com.liuyun.github.alarmpush.email;
 
-import com.liuyun.github.utils.ThreadPoolRepo;
 import com.sun.mail.util.MailSSLSocketFactory;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
-import javax.mail.*;
+import javax.mail.Authenticator;
+import javax.mail.BodyPart;
+import javax.mail.Message;
+import javax.mail.Multipart;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
@@ -16,7 +21,7 @@ import java.io.File;
 import java.security.GeneralSecurityException;
 import java.util.Date;
 import java.util.Properties;
-import static com.liuyun.github.alarmpush.AlarmConfig.EmailConfig;
+import static com.liuyun.github.alarmpush.config.AlarmConfig.EmailConfig;
 
 /**
  * @Author: liuyun18
@@ -67,15 +72,13 @@ public class EmailPusher {
      * @param email
      */
     public void sendTextMail(Email email) {
-        ThreadPoolRepo.getThreadPool().execute(() -> {
-            try{
-                Message message = buildMessage(email);
-                message.setText(email.getContent());
-                Transport.send(message);
-            } catch (Exception e){
-                log.error("发送邮件失败", e);
-            }
-        });
+        try{
+            Message message = buildMessage(email);
+            message.setText(email.getContent());
+            Transport.send(message);
+        } catch (Exception e){
+            log.error("发送邮件失败", e);
+        }
     }
 
     /**
@@ -96,32 +99,30 @@ public class EmailPusher {
      * @return
      */
     public void sendHtmlMail(Email email) {
-        ThreadPoolRepo.getThreadPool().execute(() -> {
-            try{
-                Message message = buildMessage(email);
-                Multipart multipart = new MimeMultipart();
+        try{
+            Message message = buildMessage(email);
+            Multipart multipart = new MimeMultipart();
 
-                //设置HTML文本内容
-                BodyPart html = new MimeBodyPart();
-                html.setContent(email.getContent(), "text/html;charset=utf-8");
-                multipart.addBodyPart(html);
+            //设置HTML文本内容
+            BodyPart html = new MimeBodyPart();
+            html.setContent(email.getContent(), "text/html;charset=utf-8");
+            multipart.addBodyPart(html);
 
-                //设置附件
-                if(email.getAttachments() != null && !email.getAttachments().isEmpty()) {
-                    for (File file : email.getAttachments()) {
-                        DataSource source = new FileDataSource(file);
-                        BodyPart attachments = new MimeBodyPart();
-                        attachments.setDataHandler(new DataHandler(source));
-                        multipart.addBodyPart(attachments);
-                    }
+            //设置附件
+            if(email.getAttachments() != null && !email.getAttachments().isEmpty()) {
+                for (File file : email.getAttachments()) {
+                    DataSource source = new FileDataSource(file);
+                    BodyPart attachments = new MimeBodyPart();
+                    attachments.setDataHandler(new DataHandler(source));
+                    multipart.addBodyPart(attachments);
                 }
-                message.setContent(multipart);
-                message.saveChanges();
-                Transport.send(message);
-            } catch (Exception e){
-                log.error("发送邮件失败", e);
             }
-        });
+            message.setContent(multipart);
+            message.saveChanges();
+            Transport.send(message);
+        } catch (Exception e){
+            log.error("发送邮件失败", e);
+        }
     }
 
     /**

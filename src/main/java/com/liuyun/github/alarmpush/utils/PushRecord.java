@@ -1,6 +1,7 @@
-package com.liuyun.github.alarmpush;
+package com.liuyun.github.alarmpush.utils;
 
 import lombok.Data;
+
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**

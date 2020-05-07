@@ -1,8 +1,13 @@
 package com.liuyun.github.alarmpush;
 
 import com.google.common.collect.Maps;
+import com.liuyun.github.alarmpush.config.AlarmConfig;
+import com.liuyun.github.alarmpush.config.ConfigRepo;
+import com.liuyun.github.alarmpush.email.EmailPusher;
+import com.liuyun.github.alarmpush.utils.EnvUtils;
+import com.liuyun.github.alarmpush.utils.ErrorContext;
+import com.liuyun.github.alarmpush.utils.PushRecord;
 import lombok.extern.slf4j.Slf4j;
-
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -18,20 +23,10 @@ public class AlarmPusher {
     public static final int EMAIL = 1;
     /** 微信消息 */
     public static final int WECHAT = 2;
-    /** 全部消息 */
-    public static final int ALL = 3;
 
     private static AlarmConfig alarmConfig = ConfigRepo.getAlarmConfig();
     private static EmailPusher emailPusher = EmailPusher.instance(alarmConfig.getEmailConfig());
     private static Map<String, PushRecord> pushRecordMap = Maps.newConcurrentMap();
-
-    /**
-     * 推送信息
-     * @param errorContext
-     */
-    public static void pushMsg(ErrorContext errorContext) {
-        pushMsg(AlarmPusher.ALL, errorContext);
-    }
 
     /**
      * 推送消息
@@ -46,8 +41,6 @@ public class AlarmPusher {
                         pushEmailMsg(alarmConfig, errorContext); break;
                     case WECHAT:
                         pushWeChatMsg(alarmConfig, errorContext); break;
-                    case ALL:
-                        pushAllMsg(alarmConfig, errorContext); break;
                     default: return;
                 }
             }
@@ -115,15 +108,6 @@ public class AlarmPusher {
      */
     private static void pushWeChatMsg(AlarmConfig alarmConfig, ErrorContext errorContext) {
         return;
-    }
-
-    /**
-     * 推送全部消息
-     * @param alarmConfig
-     * @param errorContext
-     */
-    private static void pushAllMsg(AlarmConfig alarmConfig, ErrorContext errorContext) {
-        pushEmailMsg(alarmConfig, errorContext);
     }
 
 }

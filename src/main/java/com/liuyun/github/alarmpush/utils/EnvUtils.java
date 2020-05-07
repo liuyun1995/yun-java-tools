@@ -1,4 +1,4 @@
-package com.liuyun.github.alarmpush;
+package com.liuyun.github.alarmpush.utils;
 
 /**
  * @Author: liuyun18

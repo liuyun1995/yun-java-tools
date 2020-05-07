@@ -1,4 +1,4 @@
-package com.liuyun.github.alarmpush;
+package com.liuyun.github.alarmpush.email;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
