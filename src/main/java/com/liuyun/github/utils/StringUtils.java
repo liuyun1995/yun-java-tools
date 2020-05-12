@@ -3,6 +3,7 @@ package com.liuyun.github.utils;
 import com.google.common.collect.Lists;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.function.Function;
 
 /**
@@ -58,6 +59,29 @@ public class StringUtils {
             sb.delete(sb.length() - separator.length(), sb.length());
         }
         return sb.toString();
+    }
+
+    public static List<String> wrap(List<String> words, String tag) {
+        return wrap(words, tag, tag);
+    }
+
+    public static List<String> wrap(List<String> words, String left, String right) {
+        List<String> retList = Lists.newArrayList();
+        for (String word : words) {
+            if(isBlank(word)) {
+                continue;
+            }
+            retList.add(wrap(word, left, right));
+        }
+        return retList;
+    }
+
+    public static String wrap(String word, String tag) {
+        return wrap(word, tag, tag);
+    }
+
+    public static String wrap(String word, String left, String right) {
+        return left + word + right;
     }
 
 }
