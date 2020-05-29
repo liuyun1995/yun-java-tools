@@ -17,31 +17,27 @@ import java.net.URL;
 public class HttpUtils4 {
 
 
-    public static String doGet(String httpurl) {
+    public static String doGet(String httpUrl) {
         HttpURLConnection connection = null;
         InputStream is = null;
         BufferedReader br = null;
-        //返回结果字符串
         String result = null;
         try {
-            // 创建远程url连接对象
-            URL url = new URL(httpurl);
-            // 通过远程url连接对象打开一个连接，强转成httpURLConnection类
+            URL url = new URL(httpUrl);
             connection = (HttpURLConnection) url.openConnection();
-            // 设置连接方式：get
+            //设置连接方式
             connection.setRequestMethod("GET");
-            // 设置连接主机服务器的超时时间：15000毫秒
+            //设置连接主机服务器的超时时间(毫秒)
             connection.setConnectTimeout(15000);
-            // 设置读取远程返回的数据时间：60000毫秒
+            //设置读取远程返回的数据时间(毫秒)
             connection.setReadTimeout(60000);
-            // 发送请求
+            //发送请求
             connection.connect();
-            // 通过connection连接，获取输入流
             if (connection.getResponseCode() == 200) {
                 is = connection.getInputStream();
-                // 封装输入流is，并指定字符集
+                //封装输入流并指定字符集
                 br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
-                // 存放数据
+                //存放数据
                 StringBuffer sbf = new StringBuffer();
                 String temp = null;
                 while ((temp = br.readLine()) != null) {
@@ -68,13 +64,12 @@ public class HttpUtils4 {
         String result = null;
         try {
             URL url = new URL(httpUrl);
-            // 通过远程url连接对象打开连接
             connection = (HttpURLConnection) url.openConnection();
-            // 设置连接请求方式
+            //设置连接请求方式
             connection.setRequestMethod("POST");
-            // 设置连接主机服务器超时时间：15000毫秒
+            //设置连接主机服务器超时时间(毫秒)
             connection.setConnectTimeout(15000);
-            // 设置读取主机服务器返回数据超时时间：60000毫秒
+            //设置读取主机服务器返回数据超时时间(毫秒)
             connection.setReadTimeout(60000);
             // 默认值为：false，当向远程服务器传送数据/写数据时，需要设置为true
             connection.setDoOutput(true);

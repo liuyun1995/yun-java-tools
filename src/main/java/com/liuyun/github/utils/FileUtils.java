@@ -1,10 +1,12 @@
 package com.liuyun.github.utils;
 
+import com.google.common.io.Resources;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.util.List;
 
 /**
  * @Author: liuyun18
@@ -30,24 +32,16 @@ public class FileUtils {
         return file;
     }
 
-    public static boolean writeBytes(byte[] data, String path) {
-        FileOutputStream fos = null;
+    public static String getFileString(String path) {
         try {
-            fos = new FileOutputStream(path);
-            fos.write(data);
-            fos.flush();
-            return true;
-        } catch (Exception e) {
-            log.error("写入文件出错", e);
-            return false;
-        } finally {
-            if (fos != null) {
-                try {
-                    fos.close();
-                } catch (IOException e) {
-                    log.error("关闭文件流出错", e);
-                }
+            List<String> lines = Resources.readLines(Resources.getResource(path), Charset.forName("UTF-8"));
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < lines.size(); i++) {
+                sb.append(lines.get(i)).append("\n");
             }
+            return sb.toString();
+        } catch (Exception e) {
+            return null;
         }
     }
 
