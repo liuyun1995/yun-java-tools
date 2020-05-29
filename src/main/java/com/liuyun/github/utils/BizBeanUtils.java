@@ -8,7 +8,9 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -219,6 +221,30 @@ public class BizBeanUtils {
             }
             return map.putIfAbsent(builder.toString(), Boolean.TRUE) == null;
         };
+    }
+
+    public static <E> List<List<E>> partition(List<E> list, List<Integer> numList) {
+        List<List<E>> result = Lists.newArrayList();
+        Iterator<E> iterator = list.iterator();
+        for (Integer num : numList) {
+            int index = 0;
+            List<E> tempList = Lists.newArrayList();
+            while (iterator.hasNext() && index < num) {
+                tempList.add(iterator.next());
+                iterator.remove();
+                index++;
+            }
+            result.add(tempList);
+        }
+        return result;
+    }
+
+    public static <E, T extends Comparable> List<E> sorted(List<E> list, Function<E, T> function, boolean isAscend) {
+        if(list == null || list.size() == 0) {
+            return Lists.newArrayList();
+        }
+        Comparator<E> comparator = isAscend ? Comparator.comparing(function) : Comparator.comparing(function).reversed();
+        return list.stream().sorted(comparator).collect(Collectors.toList());
     }
 
 }

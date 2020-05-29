@@ -1,7 +1,5 @@
 package com.liuyun.github.alarmpush.config;
 
-import com.liuyun.github.alarmpush.config.AlarmConfig;
-
 /**
  * @Author: liuyun18
  * @Date: 2019/3/8 下午4:45
