@@ -1,7 +1,5 @@
 package com.liuyun.github.test;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Stack;
 
 public class Thompson {
@@ -130,7 +128,7 @@ public class Thompson {
      * @param c
      * @return
      */
-    public static boolean alphabet(char c){ return alpha(c) || c == 'E';}
+    public static boolean alphabet(char c){ return alpha(c) || c == Constants.EPSILON;}
 
     /**
      * 判断是否是正则运算符
@@ -178,7 +176,7 @@ public class Thompson {
         NFA result = new NFA(n.states.size() + m.states.size() + 2);
 
         //添加一条从0到1的空转换
-        result.transitions.add(new Transition(0, 1, 'E'));
+        result.transitions.add(new Transition(0, 1, Constants.EPSILON));
 
         //复制n的转移函数到新NFA中
         for (Transition t : n.transitions){
@@ -186,10 +184,10 @@ public class Thompson {
         }
 
         //添加一条从n的最终状态到新NFA最终状态的空转换
-        result.transitions.add(new Transition(n.states.size(), n.states.size() + m.states.size() + 1, 'E'));
+        result.transitions.add(new Transition(n.states.size(), n.states.size() + m.states.size() + 1, Constants.EPSILON));
 
         //添加一条从0到m的初始状态的空转换
-        result.transitions.add(new Transition(0, n.states.size() + 1, 'E'));
+        result.transitions.add(new Transition(0, n.states.size() + 1, Constants.EPSILON));
 
         //复制m的转移函数到新NFA中
         for (Transition t : m.transitions){
@@ -197,7 +195,7 @@ public class Thompson {
         }
 
         //添加一条从m的最终状态到新NFA最终状态的空转换
-        result.transitions.add(new Transition(m.states.size() + n.states.size(), n.states.size() + m.states.size() + 1, 'E'));
+        result.transitions.add(new Transition(m.states.size() + n.states.size(), n.states.size() + m.states.size() + 1, Constants.EPSILON));
 
         //设置新NFA的最终状态
         result.finalState = n.states.size() + m.states.size() + 1;
@@ -212,41 +210,23 @@ public class Thompson {
      * @return
      */
     public static NFA concat(NFA n, NFA m){
+        int nsize = n.states.size();
+        //删除m的初始状态
+        m.states.remove(0);
 
-        m.states.remove(0); // delete m's initial state
-
-        // copy NFA m's transitions to n, and handles connecting n & m
-        for (Transition t: m.transitions){
-            n.transitions.add(new Transition(t.from + n.states.size()-1, t.to + n.states.size() - 1, t.symbol));
+        //复制m的转移函数到n
+        for (Transition t : m.transitions){
+            n.transitions.add(new Transition(t.from + nsize - 1, t.to + nsize - 1, t.symbol));
         }
 
-        // take m and combine to n after erasing inital m state
-        for (Integer s: m.states){
-            n.states.add(s + n.states.size() + 1);
+        //添加m的状态到n中
+        for (Integer s : m.states){
+            n.states.add(s + nsize - 1);
         }
 
-        n.finalState = n.states.size() + m.states.size() - 2;
+        //设置n的最终状态
+        n.finalState = nsize + m.states.size() - 1;
         return n;
-
-//        //新NFA的状态数是n和m的状态数之和
-//        NFA result = new NFA(n.states.size() + m.states.size());
-//
-//        //复制n的转移函数到新NFA中
-//        for (Transition t : n.transitions){
-//            result.transitions.add(new Transition(t.from, t.to, t.symbol));
-//        }
-//
-//        //添加一条从n的最终状态到m的初始状态的空转换
-//        result.transitions.add(new Transition(n.states.size() - 1, n.states.size(), 'E'));
-//
-//        //复制m的转移函数到新NFA中
-//        for (Transition t : m.transitions){
-//            result.transitions.add(new Transition(n.states.size() + t.from, n.states.size() + t.to, t.symbol));
-//        }
-//
-//        //设置新NFA的最终状态
-//        result.finalState = n.states.size() + m.states.size() - 1;
-//        return result;
     }
 
     /**
@@ -259,7 +239,7 @@ public class Thompson {
         NFA result = new NFA(n.states.size() + 2);
 
         //添加一条从0到1的空转换
-        result.transitions.add(new Transition(0, 1, 'E'));
+        result.transitions.add(new Transition(0, 1, Constants.EPSILON));
 
         //复制原NFA的转移函数到新NFA中
         for (Transition t : n.transitions){
@@ -267,78 +247,22 @@ public class Thompson {
         }
 
         //添加一条从原NFA最终状态到新NFA最终状态的空转换
-        result.transitions.add(new Transition(n.states.size(), n.states.size() + 1, 'E'));
+        result.transitions.add(new Transition(n.states.size(), n.states.size() + 1, Constants.EPSILON));
 
         //添加一条从原NFA的最终状态到初始状态的空转换
-        result.transitions.add(new Transition(n.states.size(), 1, 'E'));
+        result.transitions.add(new Transition(n.states.size(), 1, Constants.EPSILON));
 
         //添加一条从新NFA的初始状态到最终状态的空转换
-        result.transitions.add(new Transition(0, n.states.size() + 1, 'E'));
+        result.transitions.add(new Transition(0, n.states.size() + 1, Constants.EPSILON));
 
         //设置新NFA的最终状态
         result.finalState = n.states.size() + 1;
         return result;
     }
 
-    public static class NFA {
-        /** 状态集合 */
-        public List<Integer> states;
-        /** 状态转移函数集合 */
-        public List <Transition> transitions;
-        /** 最终状态 */
-        public int finalState;
-
-        public NFA(){
-            this.states = new ArrayList();
-            this.transitions = new ArrayList();
-            this.finalState = 0;
-        }
-
-        public NFA(int size){
-            this.states = new ArrayList();
-            this.transitions = new ArrayList();
-            this.finalState = 0;
-            this.setStateSize(size);
-        }
-
-        public NFA(char c){
-            this.states = new ArrayList();
-            this.transitions = new ArrayList();
-            this.setStateSize(2);
-            this.finalState = 1;
-            this.transitions.add(new Transition(0, 1, c));
-        }
-
-        public void setStateSize(int size){
-            for (int i = 0; i < size; i++) {
-                this.states.add(i);
-            }
-        }
-
-        public void display(){
-            for (Transition t: transitions){
-                System.out.println("("+ t.from +", "+ t.symbol + ", "+ t.to +")");
-            }
-        }
-    }
-
-    private static class Transition {
-        /** 当前状态 */
-        public int from;
-        /** 目标状态 */
-        public int to;
-        /** 标号字符 */
-        public char symbol;
-
-        public Transition(int from, int to, char symbol){
-            this.from = from;
-            this.to = to;
-            this.symbol = symbol;
-        }
-    }
 
     public static void main(String[] args) {
-        NFA nfa = compile("a(b|c)*");
+        NFA nfa = Thompson.compile("a(b|c)*");
         nfa.display();
     }
 
