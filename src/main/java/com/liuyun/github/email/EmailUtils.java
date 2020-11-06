@@ -16,10 +16,6 @@ import java.security.GeneralSecurityException;
 import java.util.Date;
 import java.util.Properties;
 
-/**
- * @Author: liuyun18
- * @Date: 2018/10/22 下午4:16
- */
 @Data
 public class EmailUtils {
 

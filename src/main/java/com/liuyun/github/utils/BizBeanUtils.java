@@ -20,10 +20,6 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-/**
- * @Author: liuyun18
- * @Date: 2018/8/29 下午2:23
- */
 @Slf4j
 public class BizBeanUtils {
 

@@ -7,10 +7,6 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-/**
- * @Author: liuyun18
- * @Date: 2018/12/24 下午1:59
- */
 @Slf4j
 public class ImageUtil {
 

@@ -4,10 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-/**
- * @Author: liuyun18
- * @Date: 2018/11/22 下午4:05
- */
 public enum WeekEnum {
 
     Monday(1, "周一"),

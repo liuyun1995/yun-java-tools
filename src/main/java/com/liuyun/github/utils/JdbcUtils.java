@@ -6,10 +6,6 @@ import java.sql.*;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @Author: liuyun18
- * @Date: 2018/8/30 上午11:43
- */
 public class JdbcUtils {
 
     /**

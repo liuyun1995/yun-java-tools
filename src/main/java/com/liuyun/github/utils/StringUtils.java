@@ -1,15 +1,10 @@
 package com.liuyun.github.utils;
 
 import com.google.common.collect.Lists;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
 
-/**
- * @author: lewis
- * @create: 2019/12/28 上午10:57
- */
 public class StringUtils {
 
     public static boolean isNotEmpty(CharSequence cs) {

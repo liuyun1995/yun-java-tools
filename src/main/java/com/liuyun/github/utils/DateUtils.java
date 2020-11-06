@@ -3,10 +3,6 @@ package com.liuyun.github.utils;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/**
- * @Author: liuyun18
- * @Date: 2018/10/12 下午6:10
- */
 public class DateUtils {
 
     public static final String yyyy_MM_dd = "yyyy-MM-dd";

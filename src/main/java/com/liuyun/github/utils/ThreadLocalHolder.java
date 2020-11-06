@@ -3,10 +3,6 @@ package com.liuyun.github.utils;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * @Author: liuyun18
- * @Date: 2019/1/24 下午7:42
- */
 public class ThreadLocalHolder {
 
     public static ThreadLocal<Map<String, Object>> local = new ThreadLocal();

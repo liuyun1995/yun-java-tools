@@ -8,10 +8,6 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.List;
 
-/**
- * @Author: liuyun18
- * @Date: 2018/8/30 上午9:53
- */
 @Slf4j
 public class FileUtils {
 

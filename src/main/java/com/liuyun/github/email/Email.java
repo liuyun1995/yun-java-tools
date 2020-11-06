@@ -6,10 +6,6 @@ import javax.mail.internet.InternetAddress;
 import java.io.File;
 import java.util.List;
 
-/**
- * @Author: liuyun18
- * @Date: 2018/10/22 下午4:24
- */
 @Data
 public class Email {
 

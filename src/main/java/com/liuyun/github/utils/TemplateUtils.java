@@ -7,10 +7,6 @@ import java.io.StringWriter;
 import java.nio.charset.Charset;
 import java.util.List;
 
-/**
- * @author: lewis
- * @create: 2020/3/10 下午4:50
- */
 public class TemplateUtils {
 
     private static final Configuration CONFIGURATION = new Configuration(Configuration.VERSION_2_3_22);

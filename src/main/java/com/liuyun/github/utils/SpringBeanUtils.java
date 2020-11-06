@@ -1,17 +1,13 @@
 package com.liuyun.github.utils;
 
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
-import java.util.Map;
 
-/**
- * @Author: liuyun18
- * @Date: 2019/3/4 下午6:13
- */
 @Slf4j
 @Component
 public class SpringBeanUtils implements ApplicationContextAware {

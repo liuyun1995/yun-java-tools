@@ -2,11 +2,6 @@ package com.liuyun.github.utils;
 
 import java.math.BigDecimal;
 
-/**
- * 金额计算工具类
- * @Author: liuyun18
- * @Date: 2018/11/26 上午10:25
- */
 public class MoneyUtil {
 
     /** 默认小数位 */

@@ -1,11 +1,7 @@
 package com.liuyun.github.function;
 
-import com.google.common.base.Function;
+import java.util.function.Function;
 
-/**
- * @Author: liuyun18
- * @Date: 2018/10/24 下午2:23
- */
 public abstract class SafeFunction<InType, OutType> implements Function<InType, OutType> {
 
     @Override
