@@ -23,20 +23,20 @@ import java.util.stream.Collectors;
 @Slf4j
 public class BizBeanUtils {
 
-    public static void copyProperties(Object source, Object target) {
+    public static void copyBean(Object source, Object target) {
         if (source == null || target == null) {
             throw new IllegalArgumentException("入参不能为空");
         }
         BeanUtils.copyProperties(source, target);
     }
 
-    public static <S, T> T copyProperties(S source, Class<T> clazz) {
+    public static <S, T> T copyBean(S source, Class<T> clazz) {
         if (source == null || clazz == null) {
             throw new IllegalArgumentException("入参不能为空");
         }
         try {
             T target = clazz.newInstance();
-            copyProperties(source, target);
+            copyBean(source, target);
             return target;
         } catch (Exception e) {
             log.error("Copy Bean Error!", e);
@@ -44,14 +44,14 @@ public class BizBeanUtils {
         }
     }
 
-    public static <S, T> List<T> copyProperties(List<S> source, Class<T> clazz) {
+    public static <S, T> List<T> copyBean(List<S> source, Class<T> clazz) {
         if (CollectionUtils.isEmpty(source)) {
             return new ArrayList(0);
         }
         if (clazz == null) {
             throw new IllegalArgumentException("入参不能为空");
         }
-        return source.stream().map(e -> copyProperties(e, clazz)).collect(Collectors.toList());
+        return source.stream().map(e -> copyBean(e, clazz)).collect(Collectors.toList());
     }
 
     public static <S, T> List<T> copyList(List<S> sList, Class<T> clazz) {
@@ -65,7 +65,7 @@ public class BizBeanUtils {
         sList.forEach(source -> {
             try {
                 T target = clazz.newInstance();
-                copyProperties(source, target);
+                copyBean(source, target);
                 targetList.add(target);
             } catch (Exception e) {
                 log.error("copyList Error!", e);
