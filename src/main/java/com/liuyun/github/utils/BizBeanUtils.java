@@ -54,12 +54,9 @@ public class BizBeanUtils {
         return source.stream().map(e -> copyBean(e, clazz)).collect(Collectors.toList());
     }
 
-    public static <S, T> List<T> copyList(List<S> sList, Class<T> clazz) {
-        if (CollectionUtils.isEmpty(sList)) {
+    public static <S, T> List<T> copyBeanList(List<S> sList, Class<T> clazz) {
+        if (CollectionUtils.isEmpty(sList) || clazz == null) {
             return new ArrayList(0);
-        }
-        if (clazz == null) {
-            throw new IllegalArgumentException("入参不能为空");
         }
         List<T> targetList = Lists.newArrayList();
         sList.forEach(source -> {
@@ -75,11 +72,8 @@ public class BizBeanUtils {
     }
 
     public static <S, T> T map(S source, Class<? extends Function<S, T>> clazz) {
-        if (source == null) {
+        if (source == null || clazz == null) {
             return null;
-        }
-        if (clazz == null) {
-            throw new IllegalArgumentException("入参不能为空");
         }
         try {
             return clazz.newInstance().apply(source);
@@ -90,11 +84,8 @@ public class BizBeanUtils {
     }
 
     public static <S, T> List<T> map(List<S> sList, Class<? extends Function<S, T>> clazz) {
-        if (CollectionUtils.isEmpty(sList)) {
+        if (CollectionUtils.isEmpty(sList) || clazz == null) {
             return new ArrayList(0);
-        }
-        if (clazz == null) {
-            throw new IllegalArgumentException("入参不能为空");
         }
         try {
             Function<S, T> function = clazz.newInstance();
@@ -106,11 +97,8 @@ public class BizBeanUtils {
     }
 
     public static <S, T> List<T> map(List<S> sList, Function<S, T> function) {
-        if (CollectionUtils.isEmpty(sList)) {
+        if (CollectionUtils.isEmpty(sList) || function == null) {
             return new ArrayList(0);
-        }
-        if (function == null) {
-            throw new IllegalArgumentException("入参不能为空");
         }
         try {
             return sList.stream().map(e -> function.apply(e)).collect(Collectors.toList());
@@ -122,7 +110,7 @@ public class BizBeanUtils {
 
     public static <K, V> Map<K, V> listToMap(Function<V, K> func1, List<V> list) {
         if (func1 == null || list == null) {
-            throw new IllegalArgumentException("入参不能为空");
+            return new HashMap(0);
         }
         Function func2 = Function.identity();
         return listToMap(func1, func2, list, HashMap.class);
@@ -130,7 +118,7 @@ public class BizBeanUtils {
 
     public static <K, V> Map<K, V> listToMap(Function<V, K> func1, List<V> list, Class<? extends Map> clazz) {
         if (func1 == null || list == null) {
-            throw new IllegalArgumentException("入参不能为空");
+            return new HashMap(0);
         }
         Function func2 = Function.identity();
         return listToMap(func1, func2, list, clazz);
@@ -138,7 +126,7 @@ public class BizBeanUtils {
 
     public static <K, R, V> Map<K, V> listToMap(Function<R, K> func1, Function<R, V> func2, List<R> list, Class<? extends Map> clazz) {
         if (func1 == null || func2 == null || list == null) {
-            throw new IllegalArgumentException("入参不能为空");
+            return new HashMap(0);
         }
         try {
             Map<K, V> map = clazz.newInstance();
@@ -152,7 +140,7 @@ public class BizBeanUtils {
 
     public static <K, V> Map<K, List<V>> listToListMap(Function<V, K> func1, List<V> list) {
         if (func1 == null || list == null) {
-            throw new IllegalArgumentException("入参不能为空");
+            return new HashMap(0);
         }
         Function func2 = Function.identity();
         return listToListMap(func1, func2, list, HashMap.class);
@@ -160,7 +148,7 @@ public class BizBeanUtils {
 
     public static <K, V> Map<K, List<V>> listToListMap(Function<V, K> func1, List<V> list, Class<? extends Map> clazz) {
         if (func1 == null || list == null) {
-            throw new IllegalArgumentException("入参不能为空");
+            return new HashMap(0);
         }
         Function func2 = Function.identity();
         return listToListMap(func1, func2, list, clazz);
@@ -168,7 +156,7 @@ public class BizBeanUtils {
 
     public static <K, R, V> Map<K, List<V>> listToListMap(Function<R, K> func1, Function<R, V> func2, List<R> list, Class<? extends Map> clazz) {
         if (func1 == null || list == null) {
-            throw new IllegalArgumentException("入参不能为空");
+            return new HashMap(0);
         }
         try {
             Map<K, List<V>> map = clazz.newInstance();
@@ -197,9 +185,9 @@ public class BizBeanUtils {
         return targetMap;
     }
 
-    public static <T, R> List<R> distinctFieldsList(Function<T, R> function, List<T> list) {
+    public static <T, R> List<R> distinctFields(List<T> list, Function<T, R> function) {
         if (function == null || list == null) {
-            throw new IllegalArgumentException("入参不能为空");
+            return new ArrayList(0);
         }
         return list.stream().map(function).distinct().collect(Collectors.toList());
     }

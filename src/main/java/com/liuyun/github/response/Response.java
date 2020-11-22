@@ -1,9 +1,7 @@
 package com.liuyun.github.response;
 
-import lombok.Data;
-import org.springframework.data.domain.Page;
-
 import java.io.Serializable;
+import lombok.Data;
 
 @Data
 public class Response<T> implements Serializable {
@@ -53,11 +51,6 @@ public class Response<T> implements Serializable {
 
     public Response paged(int pageNo, int pageSize, int listSize, int totalHits) {
         this.paging = new Paging(pageNo, pageSize, listSize, totalHits);
-        return this;
-    }
-
-    public Response paged(Page page) {
-        this.paging = new Paging(page.getNumber(), page.getSize(), page.getContent().size(), page.getTotalElements());
         return this;
     }
 
