@@ -2,6 +2,9 @@ package com.liuyun.github.http;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import java.util.List;
+import java.util.Map;
+import javax.net.ssl.SSLContext;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.Consts;
 import org.apache.http.Header;
@@ -12,7 +15,6 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
 import org.apache.http.config.ConnectionConfig;
 import org.apache.http.config.SocketConfig;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
@@ -24,9 +26,6 @@ import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.ssl.SSLContexts;
 import org.apache.http.util.EntityUtils;
-import javax.net.ssl.SSLContext;
-import java.util.List;
-import java.util.Map;
 
 @Slf4j
 public class HttpUtils {
@@ -74,10 +73,6 @@ public class HttpUtils {
 
     public static PostBuilder httpPost() {
         return new PostBuilder(httpClient);
-    }
-
-    public static PutBuilder httpPut() {
-        return new PutBuilder(httpClient);
     }
 
     private static String buildParams(Map<String, String> paramMap) {
@@ -260,61 +255,6 @@ public class HttpUtils {
                 return null;
             }
         }
-
-    }
-
-    public static class PutBuilder extends HttpBuilder<PutBuilder> {
-
-        private HttpEntity httpEntity;
-
-        public PutBuilder (CloseableHttpClient httpClient) {
-            super(httpClient);
-        }
-
-        public PutBuilder setParam(String paramJson) {
-            StringEntity stringEntity = new StringEntity(paramJson, "UTF-8");
-            stringEntity.setContentEncoding("UTF-8");
-            stringEntity.setContentType("application/json");
-            this.httpEntity = stringEntity;
-            return this;
-        }
-
-        public PutBuilder setParam(List<NameValuePair> params) {
-            this.httpEntity = new UrlEncodedFormEntity(params, Consts.UTF_8);
-            return this;
-        }
-
-        public HttpEntity doPutEntity() {
-            HttpPut httpPut = new HttpPut(this.url + buildParams(paramMap));
-            try {
-                if(httpEntity != null) {
-                    httpPut.setEntity(httpEntity);
-                }
-                if (headerMap != null && !headerMap.isEmpty()) {
-                    httpPut.setHeaders(buildHeaders(headerMap));
-                }
-                return httpClient.execute(httpPut).getEntity();
-            } catch (Exception e) {
-                log.error(e.getMessage(), e);
-                return null;
-            } finally {
-                httpPut.releaseConnection();
-            }
-        }
-
-        public String doPut() {
-            try {
-                HttpEntity httpEntity = doPutEntity();
-                if(httpEntity != null) {
-                    return EntityUtils.toString(httpEntity);
-                }
-                return null;
-            } catch (Exception e) {
-                log.error(e.getMessage(), e);
-                return null;
-            }
-        }
-
     }
 
 }
