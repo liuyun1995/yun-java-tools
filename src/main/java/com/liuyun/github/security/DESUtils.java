@@ -7,7 +7,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 /**
  * DES加密(对称加密)
- * @Author: liuyun18
+ * @Author: liuyun
  * @Date: 2018/11/28 下午2:13
  */
 public class DESUtils {

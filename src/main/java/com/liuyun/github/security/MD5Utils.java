@@ -4,7 +4,7 @@ import java.security.MessageDigest;
 
 /**
  * MD5加密(单向加密)
- * @Author: liuyun18
+ * @Author: liuyun
  * @Date: 2018/11/28 下午4:53
  */
 public class MD5Utils {

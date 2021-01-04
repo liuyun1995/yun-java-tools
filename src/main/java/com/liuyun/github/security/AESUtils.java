@@ -7,7 +7,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 /**
  * AES加密(对称加密)
- * @Author: liuyun18
+ * @Author: liuyun
  * @Date: 2018/11/26 上午10:15
  */
 public class AESUtils {
