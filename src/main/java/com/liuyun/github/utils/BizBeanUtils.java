@@ -2,10 +2,6 @@ package com.liuyun.github.utils;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
-import org.springframework.util.CollectionUtils;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -13,12 +9,16 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
+import org.springframework.util.CollectionUtils;
 
 @Slf4j
 public class BizBeanUtils {
@@ -112,16 +112,14 @@ public class BizBeanUtils {
         if (func1 == null || list == null) {
             return new HashMap(0);
         }
-        Function func2 = Function.identity();
-        return listToMap(func1, func2, list, HashMap.class);
+        return listToMap(func1, Function.identity(), list, HashMap.class);
     }
 
     public static <K, V> Map<K, V> listToMap(Function<V, K> func1, List<V> list, Class<? extends Map> clazz) {
         if (func1 == null || list == null) {
             return new HashMap(0);
         }
-        Function func2 = Function.identity();
-        return listToMap(func1, func2, list, clazz);
+        return listToMap(func1, Function.identity(), list, clazz);
     }
 
     public static <K, R, V> Map<K, V> listToMap(Function<R, K> func1, Function<R, V> func2, List<R> list, Class<? extends Map> clazz) {
@@ -185,7 +183,7 @@ public class BizBeanUtils {
         return targetMap;
     }
 
-    public static <T, R> List<R> distinctFields(List<T> list, Function<T, R> function) {
+    public static <T, R> List<R> distinctField(List<T> list, Function<T, R> function) {
         if (function == null || list == null) {
             return new ArrayList(0);
         }
@@ -193,18 +191,18 @@ public class BizBeanUtils {
     }
 
     public static <T> List<T> distinctList(List<T> list, Function<? super T, Object>... funcList) {
-        return list.stream().filter(distinctByKeys(funcList)).collect(Collectors.toList());
-    }
-
-    private static <T> Predicate<T> distinctByKeys(Function<? super T, Object>... funcList) {
+        if (list == null || list.size() == 0) {
+            return new ArrayList(0);
+        }
         Map<Object, Boolean> map = new ConcurrentHashMap();
-        return object -> {
+        Predicate<T> predicate = o -> {
             StringBuilder builder = new StringBuilder();
             for (Function function : funcList) {
-                builder.append(function.apply(object));
+                builder.append(function.apply(o));
             }
             return map.putIfAbsent(builder.toString(), Boolean.TRUE) == null;
         };
+        return list.stream().filter(Objects::nonNull).filter(predicate).collect(Collectors.toList());
     }
 
     public static <E> List<List<E>> partition(List<E> list, List<Integer> numList) {
@@ -223,12 +221,19 @@ public class BizBeanUtils {
         return result;
     }
 
-    public static <E, T extends Comparable> List<E> sorted(List<E> list, Function<E, T> function, boolean isAscend) {
-        if(list == null || list.size() == 0) {
+    public static <E, T extends Comparable> List<E> sorted(List<E> list, Function<E, T> function) {
+        return sorted(list, function, false);
+    }
+
+    public static <E, T extends Comparable> List<E> sorted(List<E> list, Function<E, T> function, boolean reverse) {
+        if (list == null || list.size() == 0) {
             return Lists.newArrayList();
         }
-        Comparator<E> comparator = isAscend ? Comparator.comparing(function) : Comparator.comparing(function).reversed();
-        return list.stream().sorted(comparator).collect(Collectors.toList());
+        Comparator<E> comparator = Comparator.comparing(function, Comparator.nullsLast(Comparator.naturalOrder()));
+        if(reverse) {
+            comparator = comparator.reversed();
+        }
+        return list.stream().filter(Objects::nonNull).sorted(comparator).collect(Collectors.toList());
     }
 
 }
